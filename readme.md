@@ -4,6 +4,10 @@
 
 This is a small utility that connects to an IMAP server and gives you a 
 breakdown of who has sent you the most emails.
+
+    pip install spamfinder
+
+Usage:
     
     Spam.
     
