@@ -1,5 +1,7 @@
 # spam
 
+[![Build Status](https://travis-ci.org/orf/spam.svg?branch=master)](https://travis-ci.org/orf/spam)
+
 This is a small utility that connects to an IMAP server and gives you a 
 breakdown of who has sent you the most emails.
     
