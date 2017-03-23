@@ -21,5 +21,5 @@ breakdown of who has sent you the most emails.
         -s, --show=<count>      Show top N senders [default: 50]
         -b, --batch=<batch>     Fetch messes in batches of N [default: 200]
     
-    
-[![asciicast](https://asciinema.org/a/b9pbyc4ntns1epr3tyvakcifk.png)](https://asciinema.org/a/b9pbyc4ntns1epr3tyvakcifk)
+
+[![asciicast](https://asciinema.org/a/6l4tjj8cpmioh95et8x8szwf2.png)](https://asciinema.org/a/6l4tjj8cpmioh95et8x8szwf2)

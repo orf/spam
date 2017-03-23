@@ -13,7 +13,7 @@ Options:
     -p, --port=<port>       IMAP SSL port to use [default: 993]
     -u, --email=<email>     Email to login with
     -s, --show=<count>      Show top N senders [default: 50]
-    -b, --batch=<batch>     Fetch messes in batches of N [default: 200]
+    -b, --batch=<batch>     Fetch messes in batches of N [default: 250]
 
 """
 
@@ -61,7 +61,9 @@ def main():
         width = 80
     else:
         width = max(width, 80)
+
     print()
+
     graph = Pyasciigraph(line_length=width, min_graph_length=20)
 
     most_common = [
@@ -69,7 +71,7 @@ def main():
         for key, value in result.most_common(count)
     ]
 
-    for line in graph.graph('Most common senders', most_common):
+    for line in graph.graph('Top senders:', most_common):
         print(line)
 
 
