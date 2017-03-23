@@ -2,7 +2,7 @@
 Spam.
 
 Usage:
-    spam [--host=<addr>] [--port=<port>] [--email=<email>]
+    spam [--host=<addr>] [--port=<port>] [--email=<email>] [--show=<count>] [--batch=<batch>]
     spam --help
     spam --version
 
@@ -12,6 +12,8 @@ Options:
     -h, --host=<addr>       IMAP host to connect to [default: imap.gmail.com]
     -p, --port=<port>       IMAP SSL port to use [default: 993]
     -u, --email=<email>     Email to login with
+    -s, --show=<count>      Show top N senders [default: 50]
+    -b, --batch=<batch>     Fetch messes in batches of N [default: 200]
 
 """
 
@@ -21,6 +23,14 @@ import getpass
 import os
 import docopt
 import pkg_resources
+
+
+def get_int(value, name):
+    if not value.isdigit():
+        print('Error: {0} must be an integer'.format(name))
+        exit(1)
+    else:
+        return int(value)
 
 
 def main():
@@ -33,12 +43,9 @@ def main():
 
     host = arguments['--host']
 
-    port = arguments['--port']
-    if not port.isdigit():
-        print('Error: Port must be an integer')
-        exit(1)
-    else:
-        port = int(port)
+    port = get_int(arguments['--port'], 'Port')
+    count = get_int(arguments['--show'], 'Count')
+    batchsize = get_int(arguments['--batch'], 'Batch')
 
     user = arguments['--email']
     if user is None:
@@ -46,7 +53,7 @@ def main():
 
     password = getpass.getpass('Enter password: ')
 
-    result, error_count = tally_inbox(host, port, user, password)
+    result, error_count = tally_inbox(host, port, user, password, batchsize)
 
     try:
         width, _ = os.get_terminal_size()
@@ -54,12 +61,12 @@ def main():
         width = 80
     else:
         width = max(width, 80)
-
+    print()
     graph = Pyasciigraph(line_length=width, min_graph_length=20)
 
     most_common = [
-        ("{0}: {1}".format(key[0], key[1]), value)
-        for key, value in result.most_common(50)
+        ('{0}: {1}'.format(key[0], key[1]), value)
+        for key, value in result.most_common(count)
     ]
 
     for line in graph.graph('Most common senders', most_common):

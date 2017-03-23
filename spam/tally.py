@@ -8,8 +8,11 @@ from tqdm import tqdm
 parser = HeaderParser()
 
 
-def tally_inbox(host, port, user, password):
+def tally_inbox(host, port, user, password, batchsize):
     TALLY, ERRORS = Counter(), 0
+
+    if batchsize is None:
+        batchsize = 200
 
     print("Connecting to {0}:{1}".format(host, port))
     client = imaplib.IMAP4_SSL(host, port)
@@ -27,8 +30,8 @@ def tally_inbox(host, port, user, password):
     total_messages = int(data[0])
     print("Selected INBOX: {0} messages".format(total_messages))
     # res, data = await client.search('ALL')
-    chunks = [(number, number + 199) for number in range(1, total_messages + 1, 200)]
-    print("Fetching messages in {0} chunks...".format(len(chunks)))
+    chunks = [(number, number + (batchsize - 1)) for number in range(1, total_messages + 1, batchsize)]
+    print("Fetching messages in {0} chunks of {1}".format(len(chunks), batchsize))
 
     for start, end in tqdm(chunks):
         res, data = client.fetch("{0}:{1}".format(start, end), '(BODY.PEEK[HEADER])')
